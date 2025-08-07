@@ -6,29 +6,29 @@
 }
 
 .wallpaper-picker {
-    background: colors.$base;
+    background: transparent;// rgba(colors.$base, 0.5);
     border-radius: 12px;
     padding: 20px;
     border: 1px solid colors.$lavender;
 
-}
-
-.title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: colors.$text;
-}
-
-.apply-button {
-    background: colors.$lavender;
-    color: colors.$crust;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: bold;
-
-    &:hover {
-        background: colors.$mauve;
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+        color: colors.$text;
     }
+
+    .apply-button {
+        background: colors.$lavender;
+        color: colors.$crust;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: bold;
+
+        &:hover {
+            background: colors.$mauve;
+        }
+    }
+
 }

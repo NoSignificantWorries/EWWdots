@@ -6,8 +6,8 @@
             :text "Select Wallpaper"
             :class "title"
         )
-        (box
-            :class "wallpaper-grid"
+        (literal
+            :content (include "$HOME/EWWdots/scripts/wallpapers/wallpaper_thumbnails.sh")
         )
         (button
             :class "apply-button"
@@ -26,7 +26,6 @@
         :title "Wallpaper picker")
     :stacking "fg"
     :resizeable false
-    :focus true
     :namespace "wallpaper-picker"
     (wallpaper-picker)
 )
