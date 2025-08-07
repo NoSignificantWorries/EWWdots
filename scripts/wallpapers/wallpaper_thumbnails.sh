@@ -15,12 +15,12 @@ for img in "$WALLPAPER_DIR"/*.{jpg,jpeg,png}; do
     fi
 done
 
-echo "(box :class \"wallpaper-grid\""
+output="(box :class \"wallpaper-grid\""
 for thumb in "$THUMB_DIR"/*.{jpg,jpeg,png}; do
     if [ -f "$thumb" ]; then
         original_img="$WALLPAPER_DIR/$(basename "$thumb")"
-        echo "    (button :onclick \"echo $original_img > /tmp/wallpaper\"
-                  (image :path \"$thumb\" :class \"wallpaper-thumb\"))"
+        output="$output (button :onclick \"echo $original_img > /tmp/wallpaper\" (image :path \"$thumb\" :class \"wallpaper-thumb\"))"
     fi
 done
-echo ")"
+
+echo "$output)"

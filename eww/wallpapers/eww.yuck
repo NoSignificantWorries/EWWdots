@@ -1,3 +1,6 @@
+(deflisten thumb :initial ""
+    "/home/dmitry/EWWdots/scripts/wallpapers/wallpaper_thumbnails.sh")
+
 (defwidget wallpaper-picker[]
     (box
         :orientation "vertical"
@@ -7,8 +10,16 @@
             :class "title"
         )
         (literal
-            :content (include "$HOME/EWWdots/scripts/wallpapers/wallpaper_thumbnails.sh")
+            :content thumb
         )
+        ;(box :class "wallpaper-grid"
+        ;    (button :onclick "echo /home/dmitry/Pictures/Wallpapers/wallpaper1.jpg > /tmp/wallpaper"
+        ;          (image :path "/tmp/eww-wallpaper-thumbnails/wallpaper1.jpg" :class "wallpaper-thumb"))
+        ;    (button :onclick "echo /home/dmitry/Pictures/Wallpapers/bansai2_ascii.png > /tmp/wallpaper"
+        ;          (image :path "/tmp/eww-wallpaper-thumbnails/bansai2_ascii.png" :class "wallpaper-thumb"))
+        ;    (button :onclick "echo /home/dmitry/Pictures/Wallpapers/bansai3_ascii.png > /tmp/wallpaper"
+        ;          (image :path "/tmp/eww-wallpaper-thumbnails/bansai3_ascii.png" :class "wallpaper-thumb"))
+        ;)
         (button
             :class "apply-button"
             :onclick "notify-send 'Test' 'Hello'"
