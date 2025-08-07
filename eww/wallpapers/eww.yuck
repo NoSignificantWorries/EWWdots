@@ -1,0 +1,32 @@
+(defwidget wallpaper-picker[]
+    (box
+        :orientation "vertical"
+        :class "wallpaper-picker"
+        (label
+            :text "Select Wallpaper"
+            :class "title"
+        )
+        (box
+            :class "wallpaper-grid"
+        )
+        (button
+            :class "apply-button"
+            :onclick "notify-send 'Test' 'Hello'"
+            "Apply"
+        )
+    )
+)
+
+(defwindow wallpaper-picker
+    :monitor 0
+    :geometry (geometry
+        :width 500
+        :height 300
+        :anchor "center"
+        :title "Wallpaper picker")
+    :stacking "fg"
+    :resizeable false
+    :focus true
+    :namespace "wallpaper-picker"
+    (wallpaper-picker)
+)
