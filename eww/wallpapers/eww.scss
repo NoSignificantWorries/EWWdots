@@ -18,6 +18,18 @@
         color: colors.$text;
     }
 
+    .wallpaper-grid {
+        margin-bottom: 20px;
+
+        .wallpaper-thumb {
+            border-radius: 8px;
+
+            &:hover {
+                border: 2px solid #7aa2f7;
+            }
+        }
+    }
+
     .apply-button {
         background: colors.$lavender;
         color: colors.$crust;
