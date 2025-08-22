@@ -1,0 +1,25 @@
+(include "/home/dmitry/.config/eww/widgets/test.yuck")
+(include "/home/dmitry/.config/eww/widgets/test02.yuck")
+
+(defwindow wallpaper-picker#esc
+    :monitor 0
+    :geometry (geometry
+        :width 500
+        :height 300
+        :anchor "center"
+        :title "Wallpaper picker")
+    :stacking "fg"
+    :resizable false
+    :namespace "wallpaper-picker"
+    (wallpaper-picker-widget)
+)
+
+(defwindow data-structures
+  :monitor 0
+  :geometry (geometry
+    :anchor "center"
+  )
+  :stacking "fg"
+  :resizable false
+  (layout)
+)

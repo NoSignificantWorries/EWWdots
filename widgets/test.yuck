@@ -1,0 +1,15 @@
+(defwidget wallpaper-picker-widget []
+    (box
+        :orientation "vertical"
+        :class "wallpaper-picker"
+        (label
+            :text "Select Wallpaper"
+            :class "title"
+        )
+        (button
+            :class "apply-button"
+            :onclick "../scripts/change_wallpaper.sh"
+            "Apply"
+        )
+    )
+)
