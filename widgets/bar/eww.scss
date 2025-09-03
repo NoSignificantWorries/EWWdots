@@ -1,0 +1,35 @@
+@use "/home/dmitry/.config/eww/colors/catppuccin-mocha.scss" as colors;
+
+* {
+    all: unset;
+    font-family: "JetBrains Mono";
+}
+
+@mixin group-style($lmarg: 0px, $rmarg: 0px) {
+    background: rgba(colors.$base, 0.8);
+    margin: 5px $rmarg 5px $lmarg;
+    border: 2px solid rgba(colors.$lavender, 0.8);
+    border-radius: 10px;
+}
+
+.bar {
+    background: transparent;
+    padding: 0px 8px 0px 8px;
+    
+    .sys-group {
+        @include group-style(0px, 400px);
+    }
+
+    .dashboard-button {
+        background-image: url("../../icons/dashboard.svg");
+        color: aqua;
+        background-repeat: no-repeat;
+        background-size: 24px 24px;
+        background-position: center center;
+    }
+
+    .power-group {
+        @include group-style(400px, 0px);
+    }
+}
+
