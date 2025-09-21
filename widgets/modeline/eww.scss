@@ -1,0 +1,11 @@
+@use "/home/dmitry/.config/eww/colors/catppuccin-mocha.scss" as colors;
+
+* {
+    all: unset;
+    font-family: "JetBrains Mono";
+}
+
+.modeline {
+    background: #ff0000;
+}
+

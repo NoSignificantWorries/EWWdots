@@ -1,0 +1,36 @@
+(defvar revealer-state false)
+
+(defwindow my_hover_window
+  :monitor 0
+  :geometry (geometry :width 300 :height 30 :x 40 :y 40)
+  :stacking "overlay"
+  (eventbox
+    :onhover "eww update -c ~/.config/eww/widgets/reveal revealer-state=true"
+    :onhoverlost "eww update -c ~/.config/eww/widgets/reveal revealer-state=false"
+    :hexpand true
+    :vexpand false
+    (box
+      :orientation "v"
+        (revealer
+          :transition "slidedown"
+          :duration 500
+          :reveal {revealer-state}  ; Связываем с переменной
+          :identity "my_revealer"
+          (box
+            :orientation "vertical"
+            :spacing 5
+            :hexpand true
+            :vexpand true
+            ; Контент раскрытой части
+            (label :text "Содержимое виджета 1")
+            (label :text "Содержимое виджета 1")
+            (label :text "Содержимое виджета 1")
+            (label :text "Содержимое виджета 1")
+            (label :text "Содержимое виджета 1")
+            ; ...
+          )
+        )
+    )
+  )
+)
+

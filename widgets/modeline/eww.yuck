@@ -1,0 +1,27 @@
+(defwidget layout []
+    (box
+        :class "layout"
+        :orientation "h"
+        (label
+            :class "modeline-label"
+            :text "This is modeline!"
+        )
+    )
+)
+
+(defwindow modeline
+    :exclusive true
+    :monitor 0
+    :windowtype "dock"
+    :namespace "modeline"
+    :stacking "fg"
+    :focusable false
+    :geometry (geometry
+        :x "0%"
+        :y "0%"
+        :width "100%"
+        :height "10px"
+        :anchor "bottom center")
+    :reserve (struts :side "bottom" :distance "10")
+    (layout)
+)

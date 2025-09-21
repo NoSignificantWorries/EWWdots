@@ -20,6 +20,10 @@
         @include group-style(0px, 400px);
     }
 
+    .reveal-group {
+        @include group-style(0px, 400px);
+    }
+
     .dashboard-button {
         background-image: url("../../icons/dashboard.svg");
         color: aqua;
