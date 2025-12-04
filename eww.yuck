@@ -24,6 +24,26 @@
   (layout)
 )
 
+(defwindow test-shape
+  :monitor 0
+  :geometry (geometry
+    :y "-2px"
+    :x "0%"
+    :width 200
+    :height 35
+    :anchor "top center"
+  )
+  :resizable false
+  (box
+    :class "top-window"
+    :orientation "h"
+    (label
+      :text "Hello"
+      :class "some-text"
+    )
+  )
+)
+
 
 (defwindow time-window
   :monitor 0

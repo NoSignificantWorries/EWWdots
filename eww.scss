@@ -44,3 +44,18 @@
     }
 
 }
+
+.test-shape {
+    background: rgba(#000000, 0.99);
+    border: 2px solid rgba(colors.$surface0, 0.8);
+    border-radius: 0px  0px 10px 10px;
+
+  .top-window {
+  }
+
+  .some-text {
+    color: colors.$text;
+    font-weight: bold;
+  }
+}
+

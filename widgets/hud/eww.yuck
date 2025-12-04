@@ -1,0 +1,171 @@
+(defvar eww "~/.config/eww/widgets/hud")
+
+(defvar date_reveal_state false)
+(defvar bat_reveal_state false)
+
+;; datetime
+(defpoll time :interval "60s" `date +%H:%M`)
+(defpoll day :interval "60s" `date +%d`)
+(defpoll month :interval "60s" `date +%m`)
+(defpoll year :interval "60s" `date +%Y`)
+(defpoll day_name :interval "60s" `date +%A`)
+;; scripts
+(defpoll kb_layout :interval "1s" `~/.config/eww/widgets/hud/scripts/layout.sh`)
+(defpoll workspace :interval "1s" `~/.config/eww/widgets/hud/scripts/active_workspace.sh`)
+(defpoll count_workspaces :interval "1s" `~/.config/eww/widgets/hud/scripts/count_workspaces.sh`)
+;; battery
+(defpoll bat_status :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh`)
+(defpoll bat_time :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh time`)
+(defpoll bat_color :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh color`)
+
+
+(defwidget left-group []
+  (box
+    :class "left-group"
+    :orientation "h"
+    :spacing 6
+    :space-evenly false
+    :halign "start"
+    (label
+      :text "${kb_layout}"
+      :class "kb_layout"
+    )
+    (box
+      :class "workspace"
+      :spacing 6
+      :space-evenly false
+      (label
+        :text "${workspace}"
+        :class "current-workspace"
+      )
+      (label
+        :text "+${count_workspaces - 1}"
+        :class "workspacesp"
+      )
+    )
+  )
+)
+
+(defwidget center-group []
+  (box
+    :class "center-group"
+    :orientation "h"
+    :space-evenly false
+    :halign "center"
+    (eventbox
+      :onhover "sleep 0.5 | eww update -c ${eww} date_reveal_state=true"
+      :onhoverlost "sleep 0.5 | eww update -c ${eww} date_reveal_state=false"
+      (box
+        :orientation "h"
+        :space-evenly false
+        :spacing 4
+        :class "datetime"
+        (revealer
+          :transition "slideleft"
+          :duration 200
+          :reveal {date_reveal_state}
+          (box
+            :class "dates"
+            :orientation "h"
+            :space-evenly false
+            (label
+              :text " ${day_name}"
+              :class "day_name"
+            )
+          )
+        )
+        (label
+          :text " ${time}"
+          :class "time"
+        )
+        (revealer
+          :transition "slideright"
+          :duration 200
+          :reveal {date_reveal_state}
+          (box
+            :class "dates"
+            :orientation "h"
+            :space-evenly false
+            (label
+              :text " ${day}.${month}.${year}"
+              :class "date"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget right-group []
+  (box
+    :class "right-group"
+    :orientation "h"
+    :spacing 6
+    :halign "end"
+    :space-evenly false
+    (systray
+      :class "tray"
+      :icon-size 14
+      :spacing 5
+    )
+    (eventbox
+      :onhover "sleep 0.5 | eww update -c ${eww} bat_reveal_state=true"
+      :onhoverlost "sleep 0.5 | eww update -c ${eww} bat_reveal_state=false"
+      (box
+        :orientation "h"
+        :class "battery"
+        :space-evenly false
+        :style "background: ${bat_color}"
+        (revealer
+          :transition "slideleft"
+          :duration 200
+          :reveal {bat_reveal_state}
+          (box
+            :orientation "h"
+            :space-evenly false
+            (label
+              :class "bat"
+              :text "${bat_time}"
+              :style "color: ${bat_color}"
+            )
+          )
+        )
+        (label
+          :text "${bat_status}"
+        )
+      )
+    )
+  )
+)
+
+
+(defwidget layout []
+  (box
+    :class "panel"
+    :orientation "h"
+    :halign "fill"
+    :valign "center"
+    (left-group)
+    (center-group)
+    (right-group)
+  )
+)
+
+
+(defwindow hud-window
+  :exclusive true
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry
+    :y "0%"
+    :x "0%"
+    :width "100%"
+    :height "20px"
+    :anchor "top center"
+  )
+  :resizable false
+  :reserve (struts :side "top" :distance "20")
+  (layout)
+)
+
