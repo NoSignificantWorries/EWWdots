@@ -105,7 +105,6 @@
 
 (defwidget layout []
   (eventbox
-    :height "40px"
     :onhover "eww update -c ${eww} rev-app=true"
     :onhoverlost "sleep 1 | eww update -c ${eww} rev-app=false"
     (box
@@ -144,7 +143,6 @@
   :geometry (geometry
     :x "0%"
     :y "0%"
-    :height "40px"
     :anchor "bottom center")
   :stacking "overlay"
   :resizable false

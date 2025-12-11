@@ -1,0 +1,122 @@
+(defvar eww "~/.config/eww/widgets/controls")
+
+(defpoll volume :interval "1s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2*100}'`)
+(defpoll brightness :interval "2s" `brightnessctl g | awk '{print $1*100/$2}'`)
+
+(defvar volume-state false)
+(defvar brightness-state false)
+
+
+(defwidget volume-content []
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} volume-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} volume-state=false"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :hexpand true
+      :halign "end"
+      (revealer
+        :transition "slideleft"
+        :duration 300
+        :reveal {volume-state}
+        (box
+          :class "content"
+          :orientation "v"
+          :valign "center"
+          :space-evenly false
+          (label :class "volume" :text " ${volume}%")
+          (box
+            :orientation "v"
+            :space-evenly false
+            :class "volume-slider"
+            (scale
+              :orientation "v"
+              :flipped true
+              :value volume
+              :onchange `wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%`
+              :max 101
+              :min 0
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget brightness-content []
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} brightness-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} brightness-state=false"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :hexpand true
+      :halign "end"
+      (revealer
+        :transition "slideleft"
+        :duration 300
+        :reveal {brightness-state}
+        (box
+          :class "content"
+          :orientation "v"
+          :valign "center"
+          :space-evenly false
+          (label :class "brightness" :text "󰃠 ${brightness}%")
+          (box
+            :orientation "v"
+            :space-evenly false
+            :class "brightness-slider"
+            (scale
+              :orientation "v"
+              :flipped true
+              :value volume
+              :onchange `brightnessctl s {}%`
+              :max 101
+              :min 0
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+
+(defwindow volume-window
+  :monitor 0
+  :windowtype "normal"
+  :geometry (geometry
+    :y "3%"
+    :x "0px"
+    :width "6px"
+    :height "100px"
+    :anchor "right top"
+  )
+  :resizable false
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} volume-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} volume-state=false"
+    (volume-content)
+  )
+)
+
+(defwindow brightness-window
+  :monitor 0
+  :windowtype "normal"
+  :geometry (geometry
+    :y "25%"
+    :x "0px"
+    :width "6px"
+    :height "100px"
+    :anchor "right top"
+  )
+  :resizable false
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} brightness-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} brightness-state=false"
+    (brightness-content)
+  )
+)
+

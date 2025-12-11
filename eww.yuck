@@ -1,94 +1,74 @@
-(include "/home/dmitry/.config/eww/widgets/test.yuck")
-(include "/home/dmitry/.config/eww/widgets/test02.yuck")
+(defvar stringArray `[
+  "🦝",
+  "🐱",
+  "🐵",
+  "🦁",
+  "🐹",
+  "🦊"
+]`)
 
-(defwindow wallpaper-picker#esc
-    :monitor 0
-    :geometry (geometry
-        :width 500
-        :height 300
-        :anchor "center"
-        :title "Wallpaper picker")
-    :stacking "fg"
-    :resizable false
-    :namespace "wallpaper-picker"
-    (wallpaper-picker-widget)
-)
+(defvar object `{
+  "🦝": "racoon",
+  "🐱": "cat",
+  "🐵": "ape",
+  "🦁": "lion",
+  "🐹": "hamster",
+  "🦊": "fox"
+}`)
 
-(defwindow data-structures
-  :monitor 0
-  :geometry (geometry
-    :anchor "center"
-  )
-  :stacking "fg"
-  :resizable false
-  (layout)
-)
+; You could also create an array of objects:
+; (defvar objectArray `[{ "emoji": "🦝", "name": "racoon" }, { "emoji": "🦊", "name": "fox" }]`)
 
-(defwindow test-shape
-  :monitor 0
-  :geometry (geometry
-    :y "-2px"
-    :x "0%"
-    :width 200
-    :height 35
-    :anchor "top center"
-  )
-  :resizable false
+(defvar selected `🦝`)
+
+(defwidget animalButton [emoji]
   (box
-    :class "top-window"
-    :orientation "h"
-    (label
-      :text "Hello"
-      :class "some-text"
+    :class "animalLayout"
+    (eventbox
+      :class `animal ${selected == emoji ? "selected" : ""}`
+      :cursor "pointer"
+      :onhover "eww update selected=${emoji}"
+      emoji
     )
   )
 )
 
-
-(defwindow time-window
-  :monitor 0
-  :geometry (geometry
-    :y "35%"
-    :x "0%"
-    :width 100
-    :height 80
-    :anchor "top center"
-  )
-  :resizable false
-  (label
-    :text "Select Wallpaper"
-    :class "title"
+(defwidget animalRow []
+  (box
+    :class "animals"
+    :orientation "horizontal"
+    :halign "center"
+    (for animal in stringArray
+      (animalButton
+        :emoji animal
+      )
+    )
   )
 )
 
-(defwindow battery-window
-  :monitor 0
-  :geometry (geometry
-    :y "45%"
-    :x "40%"
-    :width 100
-    :height 80
-    :anchor "top left"
-  )
-  :resizable false
-  (label
-    :text "Battery"
-    :class "title"
+(defwidget currentAnimal []
+  (box
+    `${object[selected]} ${selected}`
   )
 )
 
-(defwindow workspace-window
-  :monitor 0
-  :geometry (geometry
-    :y "45%"
-    :x "40%"
-    :width 100
-    :height 80
-    :anchor "top right"
-  )
-  :resizable false
-  (label
-    :text "Workspace"
-    :class "title"
+(defwidget layout []
+  (box
+    :class "layout"
+    :orientation "vertical"
+    :halign "center"
+    (animalRow)
+    (currentAnimal)
   )
 )
+
+(defwindow data-structures
+  :monitor 0
+  :exclusive false
+  :focusable none
+  :geometry (geometry
+    :anchor "center"
+  )
+  (layout)
+)
+
