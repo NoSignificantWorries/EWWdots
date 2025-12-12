@@ -2,6 +2,7 @@
 
 (defvar date_reveal_state false)
 (defvar bat_reveal_state false)
+(defvar volume_reveal_state false)
 
 ;; datetime
 (defpoll time :interval "60s" `date +%H:%M`)
@@ -17,6 +18,8 @@
 (defpoll bat_status :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh`)
 (defpoll bat_time :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh time`)
 (defpoll bat_color :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh color`)
+;; sound
+(defpoll volume :interval "1s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2*100}'`)
 
 
 (defwidget left-group []
@@ -108,6 +111,31 @@
       :class "tray"
       :icon-size 14
       :spacing 5
+    )
+    (eventbox
+      :onhover "sleep 0.5 | eww update -c ${eww} volume_reveal_state=true"
+      :onhoverlost "sleep 0.5 | eww update -c ${eww} volume_reveal_state=false"
+      (box
+        :orientation "h"
+        :class "volume"
+        :space-evenly false
+        (revealer
+          :transition "slideleft"
+          :duration 200
+          :reveal {volume_reveal_state}
+          (box
+            :orientation "h"
+            :space-evenly false
+            (label
+              :class "volume-val"
+              :text "${volume}%"
+            )
+          )
+        )
+        (label
+          :text ""
+        )
+      )
     )
     (eventbox
       :onhover "sleep 0.5 | eww update -c ${eww} bat_reveal_state=true"

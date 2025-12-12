@@ -83,6 +83,30 @@
   }
 
 
+  .volume {
+    color: #000000;
+    background: colors.$sky;
+    border-radius: 5px;
+
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    padding-left: 4px;
+    padding-right: 6px;
+  }
+
+  .volume-val {
+    background: #000000;
+    color: colors.$sky;
+    border-radius: 3px;
+    margin-right: 6px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
   .battery {
     margin-right: 8px;
     color: #000000;

@@ -1,16 +1,18 @@
 (defvar eww "~/.config/eww/widgets/controls")
 
 (defpoll volume :interval "1s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2*100}'`)
-(defpoll brightness :interval "2s" `brightnessctl g | awk '{print $1*100/$2}'`)
+(defvar volume-update `wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%`)
+
+(defpoll brightness :interval "2s" `brightnessctl -m | cut -d ',' -f4 | tr -d '%'`)
+(defvar brightness-update `brightnessctl s {}%`)
 
 (defvar volume-state false)
 (defvar brightness-state false)
 
-
-(defwidget volume-content []
+(defwidget slider-block [rev-name rev-state class label value onchange]
   (eventbox
-    :onhover "sleep 0.5 | eww update -c ${eww} volume-state=true"
-    :onhoverlost "sleep 1 | eww update -c ${eww} volume-state=false"
+    :onhover "sleep 0.5 | eww update -c ${eww} ${rev-name}=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} ${rev-name}=false"
     (box
       :orientation "h"
       :space-evenly false
@@ -19,22 +21,22 @@
       (revealer
         :transition "slideleft"
         :duration 300
-        :reveal {volume-state}
+        :reveal {rev-state}
         (box
           :class "content"
           :orientation "v"
           :valign "center"
           :space-evenly false
-          (label :class "volume" :text " ${volume}%")
+          (label :class {class} :text "${label}${value}%")
           (box
             :orientation "v"
             :space-evenly false
-            :class "volume-slider"
+            :class "${class}-slider"
             (scale
               :orientation "v"
               :flipped true
-              :value volume
-              :onchange `wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%`
+              :value {value}
+              :onchange {onchange}
               :max 101
               :min 0
             )
@@ -45,41 +47,25 @@
   )
 )
 
+(defwidget volume-content []
+  (slider-block
+    :rev-name "volume-state"
+    :rev-state {volume-state}
+    :class "volume"
+    :label " "
+    :value {volume}
+    :onchange {volume-update}
+  )
+)
+
 (defwidget brightness-content []
-  (eventbox
-    :onhover "sleep 0.5 | eww update -c ${eww} brightness-state=true"
-    :onhoverlost "sleep 1 | eww update -c ${eww} brightness-state=false"
-    (box
-      :orientation "h"
-      :space-evenly false
-      :hexpand true
-      :halign "end"
-      (revealer
-        :transition "slideleft"
-        :duration 300
-        :reveal {brightness-state}
-        (box
-          :class "content"
-          :orientation "v"
-          :valign "center"
-          :space-evenly false
-          (label :class "brightness" :text "󰃠 ${brightness}%")
-          (box
-            :orientation "v"
-            :space-evenly false
-            :class "brightness-slider"
-            (scale
-              :orientation "v"
-              :flipped true
-              :value volume
-              :onchange `brightnessctl s {}%`
-              :max 101
-              :min 0
-            )
-          )
-        )
-      )
-    )
+  (slider-block
+    :rev-name "brightness-state"
+    :rev-state {brightness-state}
+    :class "brightness"
+    :label "󰃟 "
+    :value {brightness}
+    :onchange {brightness-update}
   )
 )
 
