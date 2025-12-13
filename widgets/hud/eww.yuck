@@ -19,7 +19,12 @@
 (defpoll bat_time :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh time`)
 (defpoll bat_color :interval "60s" `~/.config/eww/widgets/hud/scripts/bat_status.sh color`)
 ;; sound
-(defpoll volume :interval "1s" `wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2*100}'`)
+(defpoll volume :interval "1s" `~/.config/eww/widgets/hud/scripts/volume.sh value`)
+(defpoll volume-mute :interval "1s" `~/.config/eww/widgets/hud/scripts/volume.sh`)
+(defpoll volume-icon :interval "1s" `~/.config/eww/widgets/hud/scripts/volume.sh icon`)
+(defpoll volume-color :interval "1s" `~/.config/eww/widgets/hud/scripts/volume.sh color`)
+(defvar volume-update `wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%`)
+(defvar volume-toggle-mute "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
 
 
 (defwidget left-group []
@@ -112,28 +117,29 @@
       :icon-size 14
       :spacing 5
     )
-    (eventbox
-      :onhover "sleep 0.5 | eww update -c ${eww} volume_reveal_state=true"
-      :onhoverlost "sleep 0.5 | eww update -c ${eww} volume_reveal_state=false"
+    (button
+      :onclick {volume-toggle-mute}
       (box
         :orientation "h"
         :class "volume"
         :space-evenly false
+        :style "background: ${volume-color};"
+        (label
+          :text "${volume-icon} "
+        )
         (revealer
-          :transition "slideleft"
+          :transition "slideright"
           :duration 200
-          :reveal {volume_reveal_state}
+          :reveal {volume-mute != 1}
           (box
             :orientation "h"
             :space-evenly false
             (label
               :class "volume-val"
               :text "${volume}%"
+              :style "color: ${volume-color};"
             )
           )
-        )
-        (label
-          :text ""
         )
       )
     )

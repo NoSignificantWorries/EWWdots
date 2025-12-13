@@ -75,25 +75,25 @@ case "$1" in
     ;;
   color)
     if [ "$percent" -le 10 ]; then
-      color="#ed8796"  # Catppuccin red
+      color="#ed8796"
     elif [ "$percent" -le 20 ]; then
-      color="#ea909e"  # Смесь red и peach
+      color="#ea909e"
     elif [ "$percent" -le 30 ]; then
-      color="#e799a6"  # Более светлый красный
+      color="#e799a6"
     elif [ "$percent" -le 40 ]; then
-      color="#e3a3af"  # Переход к peach
+      color="#e3a3af"
     elif [ "$percent" -le 50 ]; then
-      color="#e0acb8"  # Почти peach
+      color="#e0acb8"
     elif [ "$percent" -le 60 ]; then
-      color="#d0b7a2"  # Смесь peach и yellow
+      color="#d0b7a2"
     elif [ "$percent" -le 70 ]; then
-      color="#c0c28c"  # Переход к yellow
+      color="#c0c28c"
     elif [ "$percent" -le 80 ]; then
-      color="#b1cd76"  # Смесь yellow и green
+      color="#b1cd76"
     elif [ "$percent" -le 90 ]; then
-      color="#a1d860"  # Ближе к green
+      color="#a1d860"
     else
-      color="#91e34a"  # Catppuccin green (адаптированный)
+      color="#91e34a"
     fi
     echo $color
     ;;

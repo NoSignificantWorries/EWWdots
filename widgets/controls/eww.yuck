@@ -9,7 +9,7 @@
 (defvar volume-state false)
 (defvar brightness-state false)
 
-(defwidget slider-block [rev-name rev-state class label value onchange]
+(defwidget slider-block [rev-name rev-state class label value onchange transition]
   (eventbox
     :onhover "sleep 0.5 | eww update -c ${eww} ${rev-name}=true"
     :onhoverlost "sleep 1 | eww update -c ${eww} ${rev-name}=false"
@@ -19,7 +19,7 @@
       :hexpand true
       :halign "end"
       (revealer
-        :transition "slideleft"
+        :transition {transition}
         :duration 300
         :reveal {rev-state}
         (box
@@ -55,6 +55,7 @@
     :label " "
     :value {volume}
     :onchange {volume-update}
+    :transition "slideleft"
   )
 )
 
@@ -66,6 +67,7 @@
     :label "󰃟 "
     :value {brightness}
     :onchange {brightness-update}
+    :transition "slideright"
   )
 )
 
@@ -92,11 +94,11 @@
   :monitor 0
   :windowtype "normal"
   :geometry (geometry
-    :y "25%"
+    :y "3%"
     :x "0px"
     :width "6px"
     :height "100px"
-    :anchor "right top"
+    :anchor "left top"
   )
   :resizable false
   (eventbox
