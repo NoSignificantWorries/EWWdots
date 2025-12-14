@@ -26,7 +26,7 @@ case "$1" in
     ;;
   color)
     if [ "$MUTED" -eq 1 ]; then
-      color="#585b70"
+      color="#6c7086"
     elif [ "$VALUE" -le 10 ]; then
       color="#ed8796"
     elif [ "$VALUE" -le 20 ]; then

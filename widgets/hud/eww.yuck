@@ -3,6 +3,8 @@
 (defvar date_reveal_state false)
 (defvar bat_reveal_state false)
 (defvar volume_reveal_state false)
+(defvar volume-state false)
+(defvar brightness-state false)
 
 ;; datetime
 (defpoll time :interval "60s" `date +%H:%M`)
@@ -25,6 +27,11 @@
 (defpoll volume-color :interval "1s" `~/.config/eww/widgets/hud/scripts/volume.sh color`)
 (defvar volume-update `wpctl set-volume @DEFAULT_AUDIO_SINK@ {}%`)
 (defvar volume-toggle-mute "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+;; brightness
+(defpoll brightness :interval "2s" `~/.config/eww/widgets/hud/scripts/brightness.sh`)
+(defpoll brightness-color :interval "2s" `~/.config/eww/widgets/hud/scripts/brightness.sh color`)
+(defpoll brightness-icon :interval "2s" `~/.config/eww/widgets/hud/scripts/brightness.sh icon`)
+(defvar brightness-update `brightnessctl s {}%`)
 
 
 (defwidget left-group []
@@ -187,6 +194,174 @@
 )
 
 
+(defwidget slider-block [rev-name rev-state class label value onchange transition color]
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} ${rev-name}=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} ${rev-name}=false"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :hexpand true
+      :halign "end"
+      (revealer
+        :transition {transition}
+        :duration 300
+        :reveal {rev-state}
+        (box
+          :class "content"
+          :orientation "v"
+          :valign "center"
+          :space-evenly false
+          (label 
+            :class {class}
+            :text "${label}${value}%"
+            :style "background: ${color};"
+          )
+          (box
+            :orientation "v"
+            :space-evenly false
+            :class "${class}-slider"
+            (scale
+              :orientation "v"
+              :flipped true
+              :value {value}
+              :onchange {onchange}
+              :max 101
+              :min 0
+              :css ".${class}-slider scale trough highlight { background-color: ${color}; }"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget volume-content []
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} volume-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} volume-state=false"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :hexpand true
+      :halign "end"
+      (revealer
+        :transition "slideleft"
+        :duration 300
+        :reveal {volume-state}
+        (box
+          :class "content"
+          :orientation "v"
+          :valign "center"
+          :space-evenly false
+          (button
+            :onclick {volume-toggle-mute}
+            (label 
+              :class "volume"
+              :text "${volume-icon} ${volume}%"
+              :style "background: ${volume-color};"
+            )
+          )
+          (box
+            :orientation "v"
+            :space-evenly false
+            :class "volume-slider"
+            (scale
+              :orientation "v"
+              :flipped true
+              :value {volume}
+              :onchange {volume-update}
+              :max 101
+              :min 0
+              :css ".volume-slider scale trough highlight { background-color: ${volume-color}; }"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget brightness-content []
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} brightness-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} brightness-state=false"
+    (box
+      :orientation "h"
+      :space-evenly false
+      :hexpand true
+      :halign "end"
+      (revealer
+        :transition "slideright"
+        :duration 300
+        :reveal {brightness-state}
+        (box
+          :class "content"
+          :orientation "v"
+          :valign "center"
+          :space-evenly false
+          (label 
+            :class "brightness"
+            :text "${brightness-icon} ${brightness}%"
+            :style "background: ${brightness-color};"
+          )
+          (box
+            :orientation "v"
+            :space-evenly false
+            :class "brightness-slider"
+            (scale
+              :orientation "v"
+              :flipped true
+              :value {brightness}
+              :onchange {brightness-update}
+              :max 101
+              :min 0
+              :css ".brightness-slider scale trough highlight { background-color: ${brightness-color}; }"
+            )
+          )
+        )
+      )
+    )
+  )
+)
+
+
+(defwindow volume-window
+  :monitor 0
+  :windowtype "normal"
+  :geometry (geometry
+    :y "3%"
+    :x "0px"
+    :width "6px"
+    :height "100px"
+    :anchor "right top"
+  )
+  :resizable false
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} volume-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} volume-state=false"
+    (volume-content)
+  )
+)
+
+(defwindow brightness-window
+  :monitor 0
+  :windowtype "normal"
+  :geometry (geometry
+    :y "3%"
+    :x "0px"
+    :width "6px"
+    :height "100px"
+    :anchor "left top"
+  )
+  :resizable false
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} brightness-state=true"
+    :onhoverlost "sleep 1 | eww update -c ${eww} brightness-state=false"
+    (brightness-content)
+  )
+)
 (defwindow hud-window
   :exclusive true
   :monitor 0

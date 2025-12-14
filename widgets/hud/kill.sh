@@ -2,5 +2,5 @@
 
 config="$HOME/.config/eww/widgets/hud"
 
-eww close -c "$config" hud-window date-popup-window 2>/dev/null
+eww close -c "$config" hud-window  volume-window brightness-window 2>/dev/null
 
