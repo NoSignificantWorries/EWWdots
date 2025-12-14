@@ -28,25 +28,25 @@ case "$1" in
     if [ "$MUTED" -eq 1 ]; then
       color="#6c7086"
     elif [ "$VALUE" -le 10 ]; then
-      color="#ed8796"
+      color="#8b2252"           # Темный пурпурно-красный
     elif [ "$VALUE" -le 20 ]; then
-      color="#ea909e"
+      color="#a02a62"           # Пурпурно-красный
     elif [ "$VALUE" -le 30 ]; then
-      color="#e799a6"
+      color="#b53272"           # Яркий пурпурный
     elif [ "$VALUE" -le 40 ]; then
-      color="#e3a3af"
+      color="#ca3a82"           # Пурпурно-розовый
     elif [ "$VALUE" -le 50 ]; then
-      color="#e0acb8"
+      color="#df4292"           # Розово-пурпурный
     elif [ "$VALUE" -le 60 ]; then
-      color="#d0b7a2"
+      color="#ed5a96"           # Кораллово-розовый
     elif [ "$VALUE" -le 70 ]; then
-      color="#c0c28c"
+      color="#f2729a"           # Яркий коралловый
     elif [ "$VALUE" -le 80 ]; then
-      color="#b1cd76"
+      color="#f78a9e"           # Светло-коралловый
     elif [ "$VALUE" -le 90 ]; then
-      color="#a1d860"
+      color="#fca2a2"           # Персиково-коралловый
     else
-      color="#91e34a"
+      color="#ffbaa6"           # Светлый персиковый (макс. громкость)
     fi
     echo $color
     ;;

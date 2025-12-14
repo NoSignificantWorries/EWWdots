@@ -34,6 +34,29 @@
 (defvar brightness-update `brightnessctl s {}%`)
 
 
+(defwidget kb-layout []
+  (label
+    :text "${kb_layout}"
+    :class "kb_layout"
+  )
+)
+
+(defwidget workspaces []
+  (box
+    :class "workspace"
+    :spacing 6
+    :space-evenly false
+    (label
+      :text "${workspace}"
+      :class "current-workspace"
+    )
+    (label
+      :text "+${count_workspaces - 1}"
+      :class "workspacesp"
+    )
+  )
+)
+
 (defwidget left-group []
   (box
     :class "left-group"
@@ -41,21 +64,51 @@
     :spacing 6
     :space-evenly false
     :halign "start"
-    (label
-      :text "${kb_layout}"
-      :class "kb_layout"
-    )
+    (kb-layout)
+    (workspaces)
+  )
+)
+
+(defwidget datetime []
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} date_reveal_state=true"
+    :onhoverlost "sleep 0.5 | eww update -c ${eww} date_reveal_state=false"
     (box
-      :class "workspace"
-      :spacing 6
+      :orientation "h"
       :space-evenly false
-      (label
-        :text "${workspace}"
-        :class "current-workspace"
+      :spacing 4
+      :class "datetime"
+      (revealer
+        :transition "slideleft"
+        :duration 200
+        :reveal {date_reveal_state}
+        (box
+          :class "dates"
+          :orientation "h"
+          :space-evenly false
+          (label
+            :text " ${day_name}"
+            :class "day_name"
+          )
+        )
       )
       (label
-        :text "+${count_workspaces - 1}"
-        :class "workspacesp"
+        :text " ${time}"
+        :class "time"
+      )
+      (revealer
+        :transition "slideright"
+        :duration 200
+        :reveal {date_reveal_state}
+        (box
+          :class "dates"
+          :orientation "h"
+          :space-evenly false
+          (label
+            :text " ${day}.${month}.${year}"
+            :class "date"
+          )
+        )
       )
     )
   )
@@ -67,46 +120,64 @@
     :orientation "h"
     :space-evenly false
     :halign "center"
-    (eventbox
-      :onhover "sleep 0.5 | eww update -c ${eww} date_reveal_state=true"
-      :onhoverlost "sleep 0.5 | eww update -c ${eww} date_reveal_state=false"
-      (box
-        :orientation "h"
-        :space-evenly false
-        :spacing 4
-        :class "datetime"
-        (revealer
-          :transition "slideleft"
-          :duration 200
-          :reveal {date_reveal_state}
-          (box
-            :class "dates"
-            :orientation "h"
-            :space-evenly false
-            (label
-              :text " ${day_name}"
-              :class "day_name"
-            )
+    (datetime)
+  )
+)
+
+(defwidget volume-widget []
+  (button
+    :onclick {volume-toggle-mute}
+    (box
+      :orientation "h"
+      :class "volume"
+      :space-evenly false
+      :style "background: ${volume-color};"
+      (label
+        :text "${volume-icon} "
+      )
+      (revealer
+        :transition "slideright"
+        :duration 200
+        :reveal {volume-mute != 1}
+        (box
+          :orientation "h"
+          :space-evenly false
+          (label
+            :class "volume-val"
+            :text "${volume}%"
+            :style "color: ${volume-color};"
           )
         )
-        (label
-          :text " ${time}"
-          :class "time"
-        )
-        (revealer
-          :transition "slideright"
-          :duration 200
-          :reveal {date_reveal_state}
-          (box
-            :class "dates"
-            :orientation "h"
-            :space-evenly false
-            (label
-              :text " ${day}.${month}.${year}"
-              :class "date"
-            )
+      )
+    )
+  )
+)
+
+(defwidget battery-widget []
+  (eventbox
+    :onhover "sleep 0.5 | eww update -c ${eww} bat_reveal_state=true"
+    :onhoverlost "sleep 0.5 | eww update -c ${eww} bat_reveal_state=false"
+    (box
+      :orientation "h"
+      :class "battery"
+      :space-evenly false
+      :style "background: ${bat_color}"
+      (revealer
+        :transition "slideleft"
+        :duration 200
+        :reveal {bat_reveal_state}
+        (box
+          :orientation "h"
+          :space-evenly false
+          (label
+            :class "bat"
+            :text "${bat_time}"
+            :style "color: ${bat_color}"
           )
         )
+      )
+      (label
+        :text "${bat_status}"
       )
     )
   )
@@ -124,59 +195,8 @@
       :icon-size 14
       :spacing 5
     )
-    (button
-      :onclick {volume-toggle-mute}
-      (box
-        :orientation "h"
-        :class "volume"
-        :space-evenly false
-        :style "background: ${volume-color};"
-        (label
-          :text "${volume-icon} "
-        )
-        (revealer
-          :transition "slideright"
-          :duration 200
-          :reveal {volume-mute != 1}
-          (box
-            :orientation "h"
-            :space-evenly false
-            (label
-              :class "volume-val"
-              :text "${volume}%"
-              :style "color: ${volume-color};"
-            )
-          )
-        )
-      )
-    )
-    (eventbox
-      :onhover "sleep 0.5 | eww update -c ${eww} bat_reveal_state=true"
-      :onhoverlost "sleep 0.5 | eww update -c ${eww} bat_reveal_state=false"
-      (box
-        :orientation "h"
-        :class "battery"
-        :space-evenly false
-        :style "background: ${bat_color}"
-        (revealer
-          :transition "slideleft"
-          :duration 200
-          :reveal {bat_reveal_state}
-          (box
-            :orientation "h"
-            :space-evenly false
-            (label
-              :class "bat"
-              :text "${bat_time}"
-              :style "color: ${bat_color}"
-            )
-          )
-        )
-        (label
-          :text "${bat_status}"
-        )
-      )
-    )
+    (volume-widget)
+    (battery-widget)
   )
 )
 
@@ -193,49 +213,6 @@
   )
 )
 
-
-(defwidget slider-block [rev-name rev-state class label value onchange transition color]
-  (eventbox
-    :onhover "sleep 0.5 | eww update -c ${eww} ${rev-name}=true"
-    :onhoverlost "sleep 1 | eww update -c ${eww} ${rev-name}=false"
-    (box
-      :orientation "h"
-      :space-evenly false
-      :hexpand true
-      :halign "end"
-      (revealer
-        :transition {transition}
-        :duration 300
-        :reveal {rev-state}
-        (box
-          :class "content"
-          :orientation "v"
-          :valign "center"
-          :space-evenly false
-          (label 
-            :class {class}
-            :text "${label}${value}%"
-            :style "background: ${color};"
-          )
-          (box
-            :orientation "v"
-            :space-evenly false
-            :class "${class}-slider"
-            (scale
-              :orientation "v"
-              :flipped true
-              :value {value}
-              :onchange {onchange}
-              :max 101
-              :min 0
-              :css ".${class}-slider scale trough highlight { background-color: ${color}; }"
-            )
-          )
-        )
-      )
-    )
-  )
-)
 
 (defwidget volume-content []
   (eventbox
@@ -362,6 +339,7 @@
     (brightness-content)
   )
 )
+
 (defwindow hud-window
   :exclusive true
   :monitor 0

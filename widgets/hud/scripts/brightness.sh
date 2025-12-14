@@ -5,25 +5,25 @@ BRIGHTNESS=$(brightnessctl -m | cut -d ',' -f4 | tr -d '%')
 case "$1" in
   color)
     if [ "$BRIGHTNESS" -le 10 ]; then
-      color="#ed8796"
+      color="#1a4a8c"
     elif [ "$BRIGHTNESS" -le 20 ]; then
-      color="#ea909e"
+      color="#2060a3"
     elif [ "$BRIGHTNESS" -le 30 ]; then
-      color="#e799a6"
+      color="#2676ba"
     elif [ "$BRIGHTNESS" -le 40 ]; then
-      color="#e3a3af"
+      color="#2c8cd1"
     elif [ "$BRIGHTNESS" -le 50 ]; then
-      color="#e0acb8"
+      color="#32a2e8"
     elif [ "$BRIGHTNESS" -le 60 ]; then
-      color="#d0b7a2"
+      color="#38b8ff"
     elif [ "$BRIGHTNESS" -le 70 ]; then
-      color="#c0c28c"
+      color="#5ec6ff"
     elif [ "$BRIGHTNESS" -le 80 ]; then
-      color="#b1cd76"
+      color="#84d4ff"
     elif [ "$BRIGHTNESS" -le 90 ]; then
-      color="#a1d860"
+      color="#aae2ff"
     else
-      color="#91e34a"
+      color="#d0f0ff"
     fi
     echo $color
     ;;
